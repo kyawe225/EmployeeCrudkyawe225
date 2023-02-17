@@ -66,7 +66,7 @@ namespace Employee.DBA.Repositiory.Classes
             }
             var objects = query.AsNoTrackingWithIdentityResolution().AsEnumerable().GroupBy(p => p.o.p).Select(p => new EmployeeDto
             {
-                Id=p.Key.Id,
+                Id = p.Key.Id,
                 FirstName = p.Key.FirstName,
                 LastName = p.Key.LastName,
                 FatherName = p.Key.FatherName,
@@ -74,8 +74,9 @@ namespace Employee.DBA.Repositiory.Classes
                 DOB = p.Key.DOB,
                 Email = p.Key.Email,
                 DepartmentNames = String.Join(',', p.Select(q => q.t.department.Name)),
-                PositionNames=String.Join(',',p.Select(q=>q.t.position.Name))
+                PositionNames = String.Join(',', p.Select(q => q.t.position.Name))
             }).ToList();
+            //var objects = query.AsNoTrackingWithIdentityResolution().AsEnumerable().ToList();
             return objects;
         }
 
