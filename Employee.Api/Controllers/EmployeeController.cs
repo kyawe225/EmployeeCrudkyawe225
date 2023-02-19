@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Employee.Api.ViewModel;
 using Employee.DBA.Tables;
+using Employee.Api.Services;
+using Employee.DBA;
 
 namespace Employee.Api.Controllers
 {
@@ -16,16 +18,34 @@ namespace Employee.Api.Controllers
             unitOfWork = work;
         }
         [HttpGet]
-        public IActionResult Index(EmployeeSearchViewModel? model)
+        public IActionResult Index(EmployeeSearchViewModel model)
         {
             if (model == null)
             {
                 model = new EmployeeSearchViewModel();
             }
-            var employees = unitOfWork.employeesrepo.search(model.DepartmentId, model.PositionId, model.Name, model.Id);
+            IEnumerable<EmployeeDto> employees = unitOfWork.employeesrepo.search(model.DepartmentId, model.PositionId, model.Name, model.Id);
             if (employees.Count() == 0)
                 return Ok(new { status = 200, message = "No Employee Found" });
             return Ok(new { status = 200, data = employees });
+        }
+        [HttpGet]
+        public IActionResult Export(EmployeeSearchViewModel model)
+        {
+            if (model == null)
+            {
+                model = new EmployeeSearchViewModel();
+            }
+            byte[] arr = { };
+            using(GenerateExcel generate = new GenerateExcel())
+            {
+                List<EmployeeDto> employees = (List<EmployeeDto>)unitOfWork.employeesrepo.search(model.DepartmentId, model.PositionId, model.Name, model.Id);
+                if (employees.Count() != 0)
+                    arr = generate.Generate(employees);
+            }
+            if(arr.Length == 0)
+                return Ok(new { status = 200, message = "No Employee Found" });
+            return File(arr, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
         [HttpGet]
         [Route("{id}")]

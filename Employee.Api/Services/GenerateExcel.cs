@@ -5,8 +5,13 @@ using Employee.DBA;
 using X15 = DocumentFormat.OpenXml.Office2010.Excel;
 namespace Employee.Api.Services
 {
-    public class GenerateExcel
+    public class GenerateExcel : IDisposable
     {
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         public byte[] Generate(IList<EmployeeDto> data)
         {
             MemoryStream memory = new MemoryStream();
