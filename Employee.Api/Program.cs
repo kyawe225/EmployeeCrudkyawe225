@@ -2,7 +2,7 @@ using Employee.DBA;
 using Serilog;
 using Serilog.Events;
 
-Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.File("log"+DateTime.Now.ToShortDateString().Replace("/","") + ".txt",rollingInterval:RollingInterval.Day).CreateLogger();
+Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.File("Logs/log"+DateTime.Now.ToShortDateString().Replace("/","") + ".txt",rollingInterval:RollingInterval.Day).CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
