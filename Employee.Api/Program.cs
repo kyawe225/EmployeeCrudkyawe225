@@ -1,7 +1,14 @@
 using Employee.DBA;
+using Serilog;
+using Serilog.Events;
+
+Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.File("log"+DateTime.Now.ToShortDateString().Replace("/","") + ".txt",rollingInterval:RollingInterval.Day).CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog();
+
+Log.Information("Hello Server Starting with serilog");
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -14,6 +21,8 @@ builder.Services.AddMySqlIdentity();
 
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
