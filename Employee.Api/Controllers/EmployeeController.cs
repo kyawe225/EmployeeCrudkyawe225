@@ -29,7 +29,7 @@ namespace Employee.Api.Controllers
                 return Ok(new { status = 200, message = "No Employee Found" });
             return Ok(new { status = 200, data = employees });
         }
-        [HttpGet]
+        [HttpGet("Export")]
         public IActionResult Export(EmployeeSearchViewModel model)
         {
             if (model == null)
@@ -37,12 +37,12 @@ namespace Employee.Api.Controllers
                 model = new EmployeeSearchViewModel();
             }
             byte[] arr = { };
-            using(GenerateExcel generate = new GenerateExcel())
-            {
+            GenerateExcel generate = new GenerateExcel();
+            
                 List<EmployeeDto> employees = (List<EmployeeDto>)unitOfWork.employeesrepo.search(model.DepartmentId, model.PositionId, model.Name, model.Id);
                 if (employees.Count() != 0)
                     arr = generate.Generate(employees);
-            }
+            
             if(arr.Length == 0)
                 return Ok(new { status = 200, message = "No Employee Found" });
             return File(arr, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
