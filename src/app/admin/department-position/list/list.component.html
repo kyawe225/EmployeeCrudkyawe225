@@ -1,0 +1,20 @@
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Department Name</th>
+    <th>Position Name</th>
+
+  </tr>
+</thead>
+<tbody>
+    <tr *ngFor="let i of departmentPosition">
+      <td>
+        {{i.position.name}}
+      </td>
+      <td>
+        {{i.department.name}}
+      </td>
+    </tr>
+</tbody>
+</table>

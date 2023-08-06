@@ -1,0 +1,5 @@
+<div class="container p-3">
+  <p class="alert alert-success p-3 m-1" *ngIf="message">{{message}}</p>
+  <app-search (submit)="formSubmit($event)" [input]="searchForm"></app-search>
+  <app-table [employee]="employees" (delete)="openDeleteDialog($event)"></app-table>
+</div>

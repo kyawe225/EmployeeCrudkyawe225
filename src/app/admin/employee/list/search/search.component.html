@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="card-header">
+        Employee Create
+    </div>
+    <div class="card-body">
+        <form class="" (ngSubmit)="submitForm" [formGroup]="formGroup">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-label">Employee Id</div>
+                <input type="text" class="form-control" formControlName="employeeId" />
+            </div>
+            <div class="col-md-5">
+                <div class="form-label">Empoyee Name</div>
+                <input type="text" class="form-control" formControlName="name"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-label">Department Name</div>
+                <input type="text" class="form-control"  formControlName="departmentName"/>
+            </div>
+            <div class="col-md-5">
+                <div class="form-label">Position Name</div>
+                <input type="text" class="form-control" formControlName="positionName" />
+            </div>
+        </div>
+        <div>
+            <input type="submit" value="Search">
+            <input type="reset" (click)="resetForm()">
+        </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Father Name</th>
+    <th>Email</th>
+    <th>Date Of Birth</th>
+    <th>Address</th>
+    <th>DepartmentName</th>
+    <th>positionName</th>
+    <th>Action</th>
+  </tr>
+</thead>
+<tbody>
+    <tr *ngFor="let i of employee">
+      <td>
+        {{i.firstName + " "+i.lastName}}
+      </td>
+      <td>
+        {{i.fatherName}}
+      </td>
+      <td>
+        {{i.email}}
+      </td>
+      <td>
+        {{i.dob}}
+      </td>
+      <td>
+        {{i.address}}
+      </td>
+      <td>
+        {{i.departmentNames}}
+      </td>
+      <td>
+        {{i.positionNames}}
+      </td>
+      <td>
+        <button class="btn btn-dark"><i class="bi bi-pencil-square" ></i></button>
+        <button class="btn btn-danger " (click)="delete(i.id)"><i class="bi bi-trash"></i></button>
+      </td>
+    </tr>
+</tbody>
+</table>

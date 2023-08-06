@@ -1,0 +1,14 @@
+<div class="modal-header">
+  {{title}}
+</div>
+<div class="modal-body p-3">
+  <form [formGroup]="createForm">
+    <div class="m-2">
+      <label for="" class="form-label">Name</label>
+      <input type="text" class="form-control" formControlName="name"/>
+    </div>
+    <div class="m-2">
+      <input type="submit" value="Submit" class="btn btn-primary" (click)="fnConfirm()">
+    </div>
+  </form>
+</div>

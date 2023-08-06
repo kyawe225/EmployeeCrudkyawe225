@@ -1,0 +1,34 @@
+<div class="card m-3 ">
+  <div class="card-header">
+    Department Position Link
+  </div>
+  <form [formGroup]="createForm">
+    <div class="card-body">
+      <div class="m-2">
+        <label class="form-label">
+          Department Name
+        </label>
+        <select type="text" formControlName="departmentId" class="form-control">
+          <option value=""></option>
+          <option *ngFor="let i of departments" [value]="i.id">
+            {{i.name}}
+          </option>
+        </select>
+      </div>
+      <div class="m-2">
+        <label class="form-label">
+          Position Name
+        </label>
+        <select formControlName="positionId" class="form-control">
+          <option value=""></option>
+          <option *ngFor="let i of positions" [value]="i.id">
+            {{i.name}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="w-100 p-2">
+      <input type="submit" class="btn btn-primary" />
+    </div>
+  </form>
+</div>
