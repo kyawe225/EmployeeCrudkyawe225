@@ -18,15 +18,17 @@ namespace Employee.Api.Controllers
             unitOfWork = work;
         }
         [HttpGet]
-        public IActionResult Index(EmployeeSearchViewModel model)
+        public IActionResult Index()
         {
-            if (model == null)
-            {
-                model = new EmployeeSearchViewModel();
-            }
-            IEnumerable<EmployeeDto> employees = unitOfWork.employeesrepo.search(model.DepartmentId, model.PositionId, model.Name, model.Id);
+            //if (model == null)
+            //{
+            //    model = new EmployeeSearchViewModel();
+            //}
+            //IEnumerable<EmployeeDto> employees = unitOfWork.employeesrepo.search(model.DepartmentId, model.PositionId, model.Name, model.Id);
+            IEnumerable<EmployeeDto> employees = unitOfWork.employeesrepo.search();
+
             if (employees.Count() == 0)
-                return Ok(new { status = 200, message = "No Employee Found" });
+                return Ok(new { status = 400, message = "No Employee Found" });
             return Ok(new { status = 200, data = employees });
         }
         [HttpGet("Export")]
@@ -44,7 +46,7 @@ namespace Employee.Api.Controllers
                     arr = generate.Generate(employees);
             
             if(arr.Length == 0)
-                return Ok(new { status = 200, message = "No Employee Found" });
+                return Ok(new { status = 400, message = "No Employee Found" });
             return File(arr, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
         [HttpGet]
@@ -59,12 +61,12 @@ namespace Employee.Api.Controllers
             }
             var employee = unitOfWork.employeesrepo.GetById(guid);
             if (employee == null)
-                return Ok(new { status = 200, message = "Employee Not Found" });
+                return Ok(new { status = 400, message = "Employee Not Found" });
             return Ok(new { status = 200, data = employee });
         }
 
         [HttpDelete]
-        public IActionResult Delete(string id)
+        public IActionResult Delete([FromQuery]string id)
         {
             try
             {
@@ -76,11 +78,12 @@ namespace Employee.Api.Controllers
                 }
                 var model = unitOfWork.employeesrepo.GetById(guid);
                 unitOfWork.employeesrepo.Delete(model);
-                return Ok(new { status = 200, message = "Successfully Deleted" });
+                unitOfWork.SaveChanges();
+                return Ok(new { status = 200, data = "Successfully Deleted" });
             }
             catch (Exception e)
             {
-                return Ok(new { status = 200, message = "No Employee Found" });
+                return Ok(new { status = 400, message = "No Employee Found" });
             }
 
         }
@@ -98,7 +101,7 @@ namespace Employee.Api.Controllers
                         FatherName = model.FatherName,
                         Email = model.Email,
                         Address = model.Address,
-                        DOB = model.DOB,
+                        DOB = model.DOB.ToUniversalTime(),
                         CreatedEmp = Guid.NewGuid().ToString(),
                         UpdatedEmp = Guid.NewGuid().ToString()
                     };
@@ -121,13 +124,13 @@ namespace Employee.Api.Controllers
                     }
                     unitOfWork.employeeDepartmentPositionsrepo.CreateRange(depPosList);
                     unitOfWork.SaveChanges();
-                    return Ok(new { status = 200, message = "Successfully Created" });
+                    return Ok(new { status = 200, data = "Successfully Created" });
                 }
                 return BadRequest(new { status = 400, message = "Successfully Created" });
             }
             catch (Exception e)
             {
-                return Ok(new { status = 200, message = "fail to create" });
+                return Ok(new { status = 400, message = "fail to create" });
             }
         }
         [HttpPut]
@@ -174,7 +177,7 @@ namespace Employee.Api.Controllers
             }
             catch (Exception e)
             {
-                return Ok(new { status = 200, message = "fail to create" });
+                return Ok(new { status = 400, message = "fail to create" });
             }
         }
     }

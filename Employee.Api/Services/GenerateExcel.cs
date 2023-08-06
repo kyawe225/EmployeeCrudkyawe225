@@ -155,7 +155,7 @@ namespace Employee.Api.Services
             sheets.Append(sheet);
             //Save & close
             workbookpart.Workbook.Save();
-            spreadsheetDocument.Close();
+            spreadsheetDocument.Dispose();
             return memory.ToArray();
         }
     }

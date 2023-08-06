@@ -19,8 +19,15 @@ namespace Employee.Api.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var Departments = _worker.departmentsrepo.All();
-            return Ok(new { status = 200, departments = Departments });
+            var Departments = _worker.departmentsrepo.All().Select(p =>
+            {
+                return new DepartmentViewModel
+                {
+                    Id=p.Id,
+                    Name=p.Name
+                };
+            });
+            return Ok(new { status = 200, data = Departments });
         }
         [HttpGet]
         [Route("{id}")]
@@ -29,10 +36,10 @@ namespace Employee.Api.Controllers
 
             Guid guid = Guid.Parse(id);
             var Department = _worker.departmentsrepo.GetById(guid);
-            return Ok(new { status = 200, Department = Department });
+            return Ok(new { status = 200, data = Department });
         }
         [HttpPost]
-        public IActionResult Create([FromBody] DepartmentViewModel model)
+        public IActionResult Create([FromBody] DepartmentCreateViewModel model)
         {
             try
             {
@@ -46,7 +53,7 @@ namespace Employee.Api.Controllers
                     };
                     _worker.departmentsrepo.Create(Department);
                     _worker.SaveChanges();
-                    return Ok(new { status = 200, message = "Successfully Created" });
+                    return Ok(new { status = 200, data = "Successfully Created" });
                 }
                 return BadRequest(new { status = 400, message = "Successfully Created" });
             }
@@ -69,7 +76,7 @@ namespace Employee.Api.Controllers
                     Departments.Name = model.Name;
                     _worker.departmentsrepo.Update(Departments);
                     _worker.SaveChanges();
-                    return Ok(new { status = 200, Departments = Departments });
+                    return Ok(new { status = 200, data = Departments });
                 }
                 return BadRequest(new { status = 400, message = "Fail to Update" });
             }catch(Exception e)
@@ -91,7 +98,7 @@ namespace Employee.Api.Controllers
                     var Departments = _worker.departmentsrepo.GetById(guid);
                     _worker.departmentsrepo.Delete(Departments);
                     _worker.SaveChanges();
-                    return Ok(new { status = 200, Departments = Departments });
+                    return Ok(new { status = 200, data = "Deleted Successfully" });
                 }
                 return BadRequest(new { status = 400, message = "Fail to Update" });
             }

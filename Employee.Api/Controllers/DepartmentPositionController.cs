@@ -46,5 +46,12 @@ namespace Employee.Api.Controllers
                 return Ok(new { status = 200, message = "Please Try Again" });
             }
         }
+        [HttpGet]
+        [Route("search")]
+        public IActionResult searchExists([FromQuery]DepartmentPositionViewModel p)
+        {
+            var depPos = work.departmentPositionsrepo.GetByDepartmentId(Guid.Parse(p.PositionId), Guid.Parse(p.DepartmentId));
+            return Ok(new { status = 200, data = depPos });
+        }
     }
 }

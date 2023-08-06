@@ -22,6 +22,19 @@ namespace Employee.DBA.Repositiory.Classes
             return _context.positions.AsNoTracking().OrderByDescending(p=> p.UpdatedAt).AsEnumerable();
         }
 
+        public IEnumerable<Position> All(bool all, string? departmentId = null)
+        {
+            if (!all)
+            {
+                return _context.department_positions.Where(p => p.DepartmentId == Guid.Parse(departmentId)).Select(p=> new Position
+                {
+                    Name=p.position.Name,
+                    Id=p.PositionId
+                }).AsEnumerable();
+            }
+            return null;
+        }
+
         public bool Create(Position entity)
         {
             _context.positions.Add(entity);

@@ -9,5 +9,6 @@ namespace Employee.DBA.Repositiory.Interfaces
 {
     public interface IDepartmentPositionRepository: ICreateRepositiory<DepartmentPosition>, IDeleteRepository<DepartmentPosition>, ISelectRepository<DepartmentPosition>
     {
+        DepartmentPosition? GetByDepartmentId(Guid positionId, Guid departmentId);
     }
 }

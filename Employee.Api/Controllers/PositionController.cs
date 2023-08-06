@@ -17,10 +17,30 @@ namespace Employee.Api.Controllers
             this.logger = logger;
         }
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] PositionSearchCondition condition)
         {
-            var positions = _worker.positionsrepo.All();
-            return Ok(new { status = 200, positions = positions });
+            if (condition.All)
+            {
+                 var position= _worker.positionsrepo.All().Select(p =>
+                {
+                    return new PositionViewModel
+                    {
+                        Name = p.Name,
+                        Id = p.Id
+                    };
+                });
+                return Ok(new { status = 200, data = position });
+            }
+            var positions = _worker.positionsrepo.All(false,condition.DepartmentId).Select(p =>
+            {
+                return new PositionViewModel
+                {
+                    Name = p.Name,
+                    Id = p.Id
+                };
+            });
+            return Ok(new { status = 200, data = positions });
+
         }
         [HttpGet]
         [Route("{id}")]
@@ -32,7 +52,7 @@ namespace Employee.Api.Controllers
             return Ok(new { status = 200, position = position });
         }
         [HttpPost]
-        public IActionResult Create([FromBody] PositionViewModel model)
+        public IActionResult Create([FromBody] PositionCreateViewModel model)
         {
             try
             {
@@ -46,9 +66,9 @@ namespace Employee.Api.Controllers
                     };
                     _worker.positionsrepo.Create(position);
                     _worker.SaveChanges();
-                    return Ok(new { status = 200, message = "Successfully Created" });
+                    return Ok(new { status = 200, data = "Successfully Created" });
                 }
-                return BadRequest(new { status = 400, message = "Successfully Created" });
+                return BadRequest(new { status = 400, message = "Not Successfully Created" });
             }
             catch(Exception e)
             {
@@ -69,7 +89,7 @@ namespace Employee.Api.Controllers
                     positions.Name = model.Name;
                     _worker.positionsrepo.Update(positions);
                     _worker.SaveChanges();
-                    return Ok(new { status = 200, positions = positions });
+                    return Ok(new { status = 200, data = "Successfully Updated" });
                 }
                 return BadRequest(new { status = 400, message = "Fail to Update" });
             }catch(Exception e)
@@ -91,7 +111,7 @@ namespace Employee.Api.Controllers
                     var positions = _worker.positionsrepo.GetById(guid);
                     _worker.positionsrepo.Delete(positions);
                     _worker.SaveChanges();
-                    return Ok(new { status = 200, positions = positions });
+                    return Ok(new { status = 200, data = "Deleted Position Successfully" });
                 }
                 return BadRequest(new { status = 400, message = "Fail to Update" });
             }

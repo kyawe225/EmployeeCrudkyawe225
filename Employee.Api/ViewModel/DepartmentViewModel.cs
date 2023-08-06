@@ -6,5 +6,11 @@ namespace Employee.Api.ViewModel
     {
         [StringLength(255)]
         public string Name { set; get; }
+        public Guid Id { set; get; }
+    }
+    public class DepartmentCreateViewModel
+    {
+        [StringLength(255)]
+        public string Name { set; get; }
     }
 }

@@ -9,5 +9,6 @@ namespace Employee.DBA.Repositiory.Interfaces
 {
     public interface IPositionRepository: ICreateRepositiory<Position>, IUpdateRepository<Position>, IDeleteRepository<Position>, ISelectRepository<Position>
     {
+        IEnumerable<Position> All(bool all, string? departmentId=null);
     }
 }

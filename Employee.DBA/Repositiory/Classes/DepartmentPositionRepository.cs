@@ -20,7 +20,7 @@ namespace Employee.DBA.Repositiory.Classes
 
         public IEnumerable<DepartmentPosition> All()
         {
-            return context.department_positions.AsNoTracking().OrderByDescending(p => p.UpdatedAt).AsEnumerable();
+            return context.department_positions.AsNoTracking().Include(p=> p.position).Include(p=> p.department).OrderByDescending(p => p.UpdatedAt).AsEnumerable();
         }
 
         public bool Create(DepartmentPosition entity)
@@ -38,6 +38,10 @@ namespace Employee.DBA.Repositiory.Classes
         public DepartmentPosition? GetById(Guid guid)
         {
             return context.department_positions.Where(p=> p.Id.Equals(guid)).FirstOrDefault();
+        }
+        public DepartmentPosition? GetByDepartmentId(Guid positionId,Guid departmentId)
+        {
+            return context.department_positions.Where(p => p.DepartmentId == departmentId).Where(p => p.PositionId == positionId).FirstOrDefault();
         }
     }
 }
